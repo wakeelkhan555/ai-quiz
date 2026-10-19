@@ -220,3 +220,59 @@ This project was developed with the assistance of ChatGPT, a large language mode
 • Configuration & Deployment: The project's .gitignore file was entirely written by the AI. Additionally, step-by-step guidance was provided by the AI to initialize git repositories, commit files, and successfully push the source code to GitHub.
 • System Design: The AI acted as a technical advisor, recommending architecture patterns and project structuring.
 
+
+Option 1: Run your project on the other laptop (recommended)
+Your project is on GitHub, so you don't need to copy all the files manually.
+Step 1: Install the required software
+On your other laptop, install:
+- Git — to download your project from GitHub.
+- Docker — to run your application in a container.
+- Ollama — needed for your local AI fun facts.
+If the other laptop runs Ubuntu, you can install these tools for Linux.
+Step 2: Download your project
+Open the terminal on the other laptop and run:
+git clone https://github.com/wakeelkhan555/ai-quiz.git
+
+Enter the project directory:
+cd ai-quiz
+
+This downloads your code from GitHub.
+Step 3: Configure the AI connection
+Your project uses Ollama to generate AI fun facts.
+
+Install Ollama on the other laptop and download the model:
+ollama pull qwen2.5:3b
+
+Start Ollama and make sure it is accessible to your Docker container.
+
+Important: Your current project uses this setting to connect Docker to Ollama on your original laptop:
+OLLAMA_URL=http://host.docker.internal:11434
+
+On the new laptop, configure the connection for that laptop's Ollama service, too. Do not copy any API keys or secrets into GitHub.
+Step 4: Build your Docker image
+From inside the ai-quiz directory, run:
+sudo docker build -t ai-quiz .
+
+This builds your application using the Dockerfile included in your repository.
+Step 5: Run the application
+sudo docker run -d \
+  --name ai-quiz \
+  -p 8000:8000 \
+  --add-host=host.docker.internal:host-gateway \
+  ai-quiz
+
+Then open Firefox on the other laptop and visit:
+
+http://localhost:8000
+
+Your quiz should appear!
+
+If the AI fun facts do not work, we will troubleshoot the Ollama connection.
+
+Option 2: Test it without installing everything
+If both laptops are connected to the same Wi-Fi, you may be able to run the application on your original laptop and open it from the other one.
+
+For example, if your original laptop's local IP address is 192.168.1.10, the other laptop could visit:
+http://192.168.1.10:8000
+
+Your original laptop must remain on and running the application. You may also need to configure your firewall to allow the connection.
